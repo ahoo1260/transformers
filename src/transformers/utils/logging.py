@@ -30,7 +30,12 @@ from typing import Optional
 
 from tqdm import auto as tqdm_lib
 
-
+def flush():
+    # create a flush method so things can be flushed when
+    # the system wants to. Not sure if simply 'printing'
+    # sys.stderr is the correct way to do it, but it seemed
+    # to work properly for me.
+    pass
 _lock = threading.Lock()
 _default_handler: Optional[logging.Handler] = None
 
@@ -83,7 +88,7 @@ def _configure_library_root_logger() -> None:
             # This library has already configured the library root logger.
             return
         _default_handler = logging.StreamHandler()  # Set sys.stderr as stream.
-        _default_handler.flush = sys.stderr.flush
+        _default_handler.flush = flush()
 
         # Apply our default configuration to the library root logger.
         library_root_logger = _get_library_root_logger()
